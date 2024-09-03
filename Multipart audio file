@@ -1,0 +1,30 @@
+from pydub import AudioSegment
+import math
+import os
+
+def split_audio(input_file, output_folder, segment_duration_ms):    
+    audio = AudioSegment.from_file(input_file)
+    
+    total_duration_ms = len(audio)
+   
+    num_segments = math.ceil(total_duration_ms / segment_duration_ms)
+    
+    os.makedirs(output_folder, exist_ok=True)
+   
+    for i in range(num_segments):
+        start_time_ms = i * segment_duration_ms
+        end_time_ms = min((i + 1) * segment_duration_ms, total_duration_ms)
+        segment = audio[start_time_ms:end_time_ms]
+        output_file_name = f"{os.path.splitext(os.path.basename(input_file))[0]}_part_{i + 1}.mp3"
+        output_file = os.path.join(output_folder, f"part_{i + 1}.mp3")
+        segment.export(output_file, format="mp3")
+
+    print(f"Audio split into {num_segments} parts successfully.")
+
+# Input parameters
+input_file_path = r"C:\Users\"
+output_folder_path = r"C:\Users\"  
+segment_duration_ms = 20 * 60 * 1000  # 20 minutes in milliseconds
+
+
+split_audio(input_file_path, output_folder_path, segment_duration_ms)
