@@ -1,0 +1,39 @@
+import os
+from moviepy.editor import *
+
+# Path to the folder containing MP4 files
+mp4_folder = "C:/Users/LAPS/PycharmProjects/CSS code gen/downloads/MH3 ost"
+
+# Path to the folder where you want to save the MP3 files
+mp3_folder = "C:/Users/LAPS/PycharmProjects/CSS code gen/mp3_output"
+
+# Create the output folder if it doesn't exist
+os.makedirs(mp3_folder, exist_ok=True)
+
+# Iterate through each MP4 file in the folder
+for filename in os.listdir(mp4_folder):
+    if filename.endswith(".mp4"):
+        # Construct the full path for the input MP4 file
+        mp4_file = os.path.join(mp4_folder, filename)
+        
+        # Remove the .mp4 extension from the filename for the output MP3 file
+        mp3_filename = os.path.splitext(filename)[0] + ".mp3"
+        
+        # Construct the full path for the output MP3 file
+        mp3_file = os.path.join(mp3_folder, mp3_filename)
+        
+        # Load the MP4 file using moviepy
+        video_clip = VideoFileClip(mp4_file)
+        
+        # Extract the audio from the video clip
+        audio_clip = video_clip.audio
+        
+        # Save the audio clip as an MP3 file
+        audio_clip.write_audiofile(mp3_file)
+        
+        # Close the video clip to free up resources
+        video_clip.close()
+        
+        print(f"Converted {filename} to {mp3_filename}")
+
+print("Conversion complete.")
